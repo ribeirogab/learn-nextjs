@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next';
 import useSWR from 'swr'
 
 import * as S from '../styles/pages/Home'
@@ -10,22 +11,32 @@ interface IProduct {
   slug: string;
 }
 
-export default function Home() {
-  const  { data: products, error } = useSWR<IProduct[]>('http://localhost:3333/recommended');
+interface HomeProps {
+  recommendedProducts: IProduct[];
+}
 
-  console.log(products);
-
+export default function Home({ recommendedProducts }: HomeProps) {
   return (
     <>
       <S.Title>
-        {error && 'failed to load'}
-        {!products ? 'loading...' : 'Produtos Recomendados:'}
+        Produtos Recomendados:
       </S.Title>
       <ul>
-        {products?.map(product => (
-          <li>- {product.title}</li>
+        {recommendedProducts.map(recommendedProducts => (
+          <li key={recommendedProducts.id}>- {recommendedProducts.title}</li>
         ))}
       </ul>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await fetch('http://localhost:3333/recommended');
+  const recommendedProducts = await response.json();
+
+  return {
+    props: {
+      recommendedProducts
+    }
+  };
 }
