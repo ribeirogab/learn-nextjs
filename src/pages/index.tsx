@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next';
-import useSWR from 'swr'
 
-import * as S from '../styles/pages/Home'
+import * as S from '../styles/pages/Home';
 
 interface IProduct {
   id: number;
@@ -30,7 +29,7 @@ export default function Home({ recommendedProducts }: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const response = await fetch('http://localhost:3333/recommended');
   const recommendedProducts = await response.json();
 
