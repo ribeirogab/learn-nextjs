@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { GetServerSideProps } from 'next';
 
 import * as S from '../styles/pages/Home';
@@ -15,6 +16,11 @@ interface HomeProps {
 }
 
 export default function Home({ recommendedProducts }: HomeProps) {
+  const handleSum = useCallback(async () => {
+    const math = (await import('../lib/math')).default;
+    alert(math.sum(2, 5));
+  }, []);
+
   return (
     <>
       <S.Title>
@@ -25,17 +31,19 @@ export default function Home({ recommendedProducts }: HomeProps) {
           <li key={recommendedProducts.id}>- {recommendedProducts.title}</li>
         ))}
       </ul>
+      
+      <button onClick={handleSum}>Sum!</button>
     </>
   )
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  const response = await fetch('http://localhost:3333/recommended');
+  const response = await fetch(`${process.env.API_URL}/recommended`);
   const recommendedProducts = await response.json();
 
   return {
     props: {
-      recommendedProducts
+      recommendedProducts,
     }
   };
 }
