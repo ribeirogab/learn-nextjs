@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import { GetServerSideProps } from 'next';
 
-import * as S from '../styles/pages/Home';
+import SEO from '~/components/SEO';
+import * as S from '~/styles/pages/Home';
 
 interface IProduct {
   id: number;
@@ -23,6 +24,13 @@ export default function Home({ recommendedProducts }: HomeProps) {
 
   return (
     <>
+      <SEO 
+        title="DevCommerce, your best e-commerce!"
+        description="uma descrição qualquer"
+        image="tobruxo.png"
+        shouldExcludeTitleSuffix
+      />
+
       <S.Title>
         Produtos Recomendados:
       </S.Title>
